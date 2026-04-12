@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Snapforge — Deterministic BNB Chain Forks in Under 10 Seconds</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700;900&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#F0F4F8;--surface:#fff;--primary:#2563EB;--secondary:#3B82F6;--text:#1E293B;--muted:#64748B;--radius:8px}
+html{scroll-behavior:smooth}
+body{font-family:'Public Sans',sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+h1,h2,h3,h4{font-family:'Merriweather',serif}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:100;background:rgba(240,244,248,.95);backdrop-filter:blur(8px);border-bottom:1px solid rgba(37,99,235,.08);padding:0 5%}
+.nav-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:64px}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.nav-logo svg{width:32px;height:32px;border-radius:6px}
+.nav-logo span{font-family:'Merriweather',serif;font-weight:900;font-size:1.15rem;color:var(--text)}
+.nav-links{display:flex;gap:32px;list-style:none}
+.nav-links a{text-decoration:none;color:var(--muted);font-size:.9rem;font-weight:500;transition:color .2s}
+.nav-links a:hover{color:var(--primary)}
+.nav-cta{background:var(--primary);color:#fff;border:none;padding:8px 20px;border-radius:var(--radius);font-family:'Public Sans',sans-serif;font-weight:600;font-size:.9rem;cursor:pointer;text-decoration:none;transition:background .2s}
+.nav-cta:hover{background:#1d4ed8}
+
+/* HERO */
+#hero{min-height:90vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:80px 5%;position:relative;overflow:hidden}
+.hero-bg{position:absolute;inset:0;pointer-events:none}
+.float-shape{position:absolute;border-radius:50%;opacity:.07;animation:floatBob 6s ease-in-out infinite}
+.float-shape:nth-child(1){width:320px;height:320px;background:var(--primary);top:-60px;left:-80px;animation-delay:0s}
+.float-shape:nth-child(2){width:200px;height:200px;background:var(--secondary);bottom:60px;right:-40px;animation-delay:2s}
+.float-shape:nth-child(3){width:140px;height:140px;background:var(--primary);top:50%;left:10%;animation-delay:4s}
+@keyframes floatBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-18px)}}
+.hero-content{position:relative;max-width:820px}
+.hero-logo{width:72px;height:72px;border-radius:14px;margin:0 auto 24px;animation:floatBob 5s ease-in-out infinite}
+.hero-badge{display:inline-block;background:rgba(37,99,235,.1);color:var(--primary);font-size:.78rem;font-weight:600;padding:4px 14px;border-radius:20px;margin-bottom:20px;letter-spacing:.5px}
+#hero h1{font-size:clamp(2.2rem,5vw,3.8rem);line-height:1.18;color:var(--text);margin-bottom:24px}
+#hero h1 span{color:var(--primary)}
+.hero-sub{font-size:1.1rem;color:var(--muted);max-width:620px;margin:0 auto 36px;line-height:1.75}
+.hero-btns{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+.btn-primary{background:var(--primary);color:#fff;padding:13px 28px;border-radius:var(--radius);font-weight:600;text-decoration:none;font-size:.95rem;transition:background .2s,transform .15s}
+.btn-primary:hover{background:#1d4ed8;transform:translateY(-2px)}
+.btn-outline{background:transparent;color:var(--primary);border:2px solid var(--primary);padding:11px 28px;border-radius:var(--radius);font-weight:600;text-decoration:none;font-size:.95rem;transition:all .2s}
+.btn-outline:hover{background:rgba(37,99,235,.07)}
+
+/* SECTIONS */
+section{padding:88px 5%}
+.section-inner{max-width:1200px;margin:0 auto}
+.section-label{font-size:.78rem;font-weight:600;color:var(--primary);letter-spacing:1px;text-transform:uppercase;margin-bottom:12px}
+.section-title{font-size:clamp(1.7rem,3vw,2.4rem);color:var(--text);margin-bottom:20px}
+.section-sub{color:var(--muted);font-size:1rem;max-width:580px;line-height:1.7}
+
+/* PROBLEM */
+#problem{background:var(--surface)}
+.problem-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:48px;align-items:start}
+.problem-text p{color:var(--muted);line-height:1.8;margin-bottom:18px}
+.problem-visual{display:flex;flex-direction:column;gap:12px}
+.pain-card{background:var(--bg);border-radius:var(--radius);padding:18px 20px;border-left:3px solid var(--primary)}
+.pain-card h4{font-family:'Merriweather',serif;font-size:.95rem;color:var(--text);margin-bottom:6px}
+.pain-card p{font-size:.85rem;color:var(--muted)}
+
+/* SOLUTION */
+#solution .section-inner{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+.solution-visual{background:var(--surface);border-radius:var(--radius);padding:32px;font-family:'Courier New',monospace;font-size:.82rem;color:var(--muted);line-height:1.9;border:1px solid rgba(37,99,235,.1)}
+.solution-visual .cmd{color:var(--primary);font-weight:700}
+.solution-visual .comment{color:#94a3b8}
+.solution-text p{color:var(--muted);line-height:1.8;margin-bottom:16px}
+
+/* FEATURES */
+#features{background:var(--surface)}
+.features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:48px}
+.feat-card{background:var(--bg);border-radius:var(--radius);padding:28px 24px;transition:transform .2s}
+.feat-card:hover{transform:translateY(-4px)}
+.feat-icon{width:44px;height:44px;border-radius:8px;background:rgba(37,99,235,.1);display:flex;align-items:center;justify-content:center;margin-bottom:16px;font-size:1.3rem}
+.feat-card h3{font-family:'Merriweather',serif;font-size:1rem;color:var(--text);margin-bottom:8px}
+.feat-card p{font-size:.875rem;color:var(--muted);line-height:1.65}
+
+/* HOW IT WORKS — timeline */
+#how-it-works .section-inner{max-width:760px}
+.timeline{margin-top:48px;position:relative;padding-left:40px}
+.timeline::before{content:'';position:absolute;left:15px;top:0;bottom:0;width:2px;background:linear-gradient(180deg,var(--primary),var(--secondary))}
+.tl-step{position:relative;margin-bottom:44px}
+.tl-step:last-child{margin-bottom:0}
+.tl-dot{position:absolute;left:-32px;top:4px;width:18px;height:18px;border-radius:50%;background:var(--primary);border:3px solid var(--bg);display:flex;align-items:center;justify-content:center}
+.tl-num{font-size:.65rem;font-weight:700;color:#fff}
+.tl-step h3{font-family:'Merriweather',serif;font-size:1.05rem;color:var(--text);margin-bottom:8px}
+.tl-step p{font-size:.9rem;color:var(--muted);line-height:1.7}
+
+/* METRICS */
+#metrics{background:var(--surface)}
+.metrics-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-top:48px}
+.metric-card{background:var(--bg);border-radius:var(--radius);padding:32px 20px;text-align:center;transition:transform .2s}
+.metric-card:hover{transform:translateY(-3px)}
+.metric-num{font-family:'Merriweather',serif;font-size:2.6rem;font-weight:900;color:var(--primary);line-height:1}
+.metric-label{font-size:.85rem;color:var(--muted);margin-top:8px;line-height:1.4}
+
+/* TECH */
+#tech{background:var(--bg)}
+.tech-pills{display:flex;flex-wrap:wrap;gap:12px;margin-top:36px}
+.tech-pill{background:var(--surface);border-radius:var(--radius);padding:10px 18px;font-size:.85rem;font-weight:600;color:var(--text);border:1px solid rgba(37,99,235,.12);transition:all .2s;display:flex;align-items:center;gap:8px}
+.tech-pill:hover{border-color:var(--primary);color:var(--primary)}
+.tech-dot{width:8px;height:8px;border-radius:50%;background:var(--primary)}
+
+/* ROADMAP */
+#roadmap{background:var(--surface)}
+.roadmap-timeline{margin-top:48px;position:relative;padding-left:44px}
+.roadmap-timeline::before{content:'';position:absolute;left:15px;top:0;bottom:0;width:2px;background:linear-gradient(180deg,var(--primary),#e2e8f0)}
+.rm-item{position:relative;margin-bottom:40px}
+.rm-dot{position:absolute;left:-36px;top:6px;width:22px;height:22px;border-radius:50%;border:3px solid var(--bg);display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:700;color:#fff}
+.rm-dot.done{background:var(--primary)}
+.rm-dot.active{background:var(--secondary)}
+.rm-dot.upcoming{background:#cbd5e1}
+.rm-badge{display:inline-block;font-size:.72rem;font-weight:600;padding:2px 10px;border-radius:20px;margin-bottom:8px}
+.rm-badge.done{background:rgba(37,99,235,.1);color:var(--primary)}
+.rm-badge.active{background:rgba(59,130,246,.12);color:var(--secondary)}
+.rm-badge.upcoming{background:#f1f5f9;color:var(--muted)}
+.rm-item h3{font-family:'Merriweather',serif;font-size:1rem;color:var(--text);margin-bottom:6px}
+.rm-item p{font-size:.875rem;color:var(--muted);line-height:1.65}
+
+/* CTA */
+#cta{background:var(--primary)}
+#cta .section-inner{text-align:center}
+#cta h2{color:#fff;font-size:clamp(1.7rem,3vw,2.4rem);margin-bottom:16px}
+#cta p{color:rgba(255,255,255,.8);margin-bottom:36px;font-size:1rem;max-width:520px;margin-left:auto;margin-right:auto}
+.cta-form{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.cta-form input{padding:12px 20px;border-radius:var(--radius);border:none;font-family:'Public Sans',sans-serif;font-size:.95rem;width:300px;outline:none;color:var(--text)}
+.cta-form button{background:#fff;color:var(--primary);padding:12px 28px;border-radius:var(--radius);border:none;font-family:'Public Sans',sans-serif;font-weight:700;font-size:.95rem;cursor:pointer;transition:all .2s}
+.cta-form button:hover{background:var(--bg)}
+
+/* FOOTER */
+footer{background:var(--text);padding:40px 5%}
+.footer-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:gap}
+.footer-copy{color:#94a3b8;font-size:.85rem}
+.footer-socials{display:flex;gap:20px}
+.footer-socials a{color:#94a3b8;text-decoration:none;font-size:1.1rem;transition:color .2s}
+.footer-socials a:hover{color:#fff}
+
+/* FADE IN */
+.fade-in{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease}
+.fade-in.visible{opacity:1;transform:translateY(0)}
+
+@media(max-width:900px){
+  .features-grid{grid-template-columns:1fr 1fr}
+  .metrics-grid{grid-template-columns:1fr 1fr}
+  #solution .section-inner,.problem-grid{grid-template-columns:1fr}
+}
+@media(max-width:600px){
+  .features-grid,.metrics-grid{grid-template-columns:1fr}
+  .nav-links{display:none}
+  .timeline,.roadmap-timeline{padding-left:30px}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a class="nav-logo" href="#">
+      <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+        <defs><linearGradient id="ng" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#2563EB"/><stop offset="100%" stop-color="#3B82F6"/></linearGradient></defs>
+        <rect width="512" height="512" rx="96" fill="#F0F4F8"/>
+        <text x="256" y="226" font-family="'Arial Black',Arial,sans-serif" font-weight="900" font-size="108" letter-spacing="-5" text-anchor="middle" fill="#1E293B">Snap</text>
+        <text x="256" y="336" font-family="'Arial Black',Arial,sans-serif" font-weight="900" font-size="108" letter-spacing="-5" text-anchor="middle" fill="url(#ng)">forge</text>
+        <rect x="108" y="350" width="296" height="5" rx="2.5" fill="url(#ng)"/>
+        <circle cx="108" cy="148" r="5" fill="#3B82F6" opacity="0.6"/>
+        <circle cx="404" cy="148" r="3.5" fill="#2563EB" opacity="0.4"/>
+      </svg>
+      <span>Snapforge</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#problem">Problem</a></li>
+      <li><a href="#solution">Solution</a></li>
+      <li><a href="#features">Features</a></li>
+      <li><a href="#how-it-works">How It Works</a></li>
+      <li><a href="#roadmap">Roadmap</a></li>
+    </ul>
+    <a class="nav-cta" href="#cta">Get Early Access</a>
+  </div>
+</nav>
+
+<section id="hero">
+  <div class="hero-bg">
+    <div class="float-shape"></div>
+    <div class="float-shape"></div>
+    <div class="float-shape"></div>
+  </div>
+  <div class="hero-content fade-in">
+    <svg class="hero-logo" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+      <defs><linearGradient id="hg" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#2563EB"/><stop offset="100%" stop-color="#3B82F6"/></linearGradient></defs>
+      <rect width="512" height="512" rx="96" fill="#F0F4F8"/>
+      <text x="256" y="226" font-family="'Arial Black',Arial,sans-serif" font-weight="900" font-size="108" letter-spacing="-5" text-anchor="middle" fill="#1E293B">Snap</text>
+      <text x="256" y="336" font-family="'Arial Black',Arial,sans-serif" font-weight="900" font-size="108" letter-spacing="-5" text-anchor="middle" fill="url(#hg)">forge</text>
+      <rect x="108" y="350" width="296" height="5" rx="2.5" fill="url(#hg)"/>
+      <circle cx="108" cy="148" r="5" fill="#3B82F6" opacity="0.6"/>
+      <circle cx="404" cy="148" r="3.5" fill="#2563EB" opacity="0.4"/>
+    </svg>
+    <div class="hero-badge">🔗 BNB Smart Chain DevTools</div>
+    <h1>Deterministic BNB Chain Forks<br>in <span>Under 10 Seconds</span></h1>
+    <p class="hero-sub">Stop testing against stale mocks and fragile RPC calls. Snapforge gives your team a continuously-synced, compressed snapshot of BNB Chain mainnet state — clone any block with one command, run 16 parallel CI jobs without contention, and get first-transaction results in under 200ms.</p>
+    <div class="hero-btns">
+      <a class="btn-primary" href="#cta">Get Early Access</a>
+      <a class="btn-outline" href="#how-it-works">See How It Works</a>
+    </div>
+  </div>
+</section>
+
+<section id="problem">
+  <div class="section-inner">
+    <div class="section-label fade-in">The Problem</div>
+    <h2 class="section-title fade-in">BNB Chain Testing Is Broken at Scale</h2>
+    <div class="problem-grid">
+      <div class="problem-text fade-in">
+        <p>Every BNB Chain developer knows the drill: spin up a fork, watch it timeout against a rate-limited RPC, pray the state matches mainnet, then wait 45 seconds per CI job. At 16 parallel jobs, you're burning 12 minutes before a single assertion runs.</p>
+        <p>Mocks lie. Forked environments that rely on live RPC calls are non-deterministic by definition — a block that advances during a test run silently changes PancakeSwap pool state, invalidating price assumptions and producing flaky green tests that mask real bugs in production.</p>
+        <p>The cold-read problem makes it worse. The first transaction in any fork test must warm every storage slot from scratch, adding hundreds of milliseconds of latency that compound across a full integration suite. Teams end up writing fewer tests, skipping fork coverage, or paying for dedicated archive nodes that still bottleneck under parallel load.</p>
+      </div>
+      <div class="problem-visual fade-in">
+        <div class="pain-card"><h4>⏱ 45s+ Fork Initialization</h4><p>Standard hardhat_reset against public RPCs averages 40–80 seconds per job, killing CI throughput.</p></div>
+        <div class="pain-card"><h4>🎲 Non-Deterministic State</h4><p>Live RPC forks advance with the chain. Two test runs on different blocks produce different results.</p></div>
+        <div class="pain-card"><h4>🚧 RPC Rate Limits Kill Parallelism</h4><p>16 concurrent CI jobs hit rate limits instantly. Teams serialize tests or pay for expensive dedicated nodes.</p></div>
+        <div class="pain-card"><h4>🥶 Cold-Read Stalls</h4><p>PancakeSwap v3 slot0 and tickBitmap entries loaded cold add 300–800ms to first-transaction latency.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="solution">
+  <div class="section-inner">
+    <div>
+      <div class="section-label fade-in">The Solution</div>
+      <h2 class="section-title fade-in">A Snapshot Engine Built for Serious Protocol Teams</h2>
+      <div class="solution-text fade-in">
+        <p>Snapforge maintains a continuously-synced, compressed snapshot of BNB Chain mainnet using Patricia-trie delta compression backed by LZ4. Every recent block is available as an isolated, deterministic fork — no RPC calls, no rate limits, no state drift.</p>
+        <p>Copy-on-write state branching means 16 parallel CI jobs can fork the same block simultaneously. Each branch is fully isolated: writes in one test suite never leak into another. The pre-warming registry loads PancakeSwap v3 pool slot0, tickBitmap, and BEP-20 permit state before your first test line executes.</p>
+        <p>Foundry and Hardhat plugins drop in as zero-migration replacements for <code>vm.createFork()</code> and <code>hardhat_reset</code>. Your existing tests run unchanged — just faster, and deterministically.</p>
+      </div>
+    </div>
+    <div class="solution-visual fade-in">
+      <div class="comment"># Install via Cargo or Homebrew</div>
+      <div class="cmd">$ brew install snapforge</div>
+      <br>
+      <div class="comment"># Fork mainnet at latest block</div>
+      <div class="cmd">$ snapforge fork --block latest</div>
+      <br>
+      <div style="color:#64748B">✓ Snapshot fetched (LZ4-compressed)</div>
+      <div style="color:#64748B">✓ Patricia-trie delta applied</div>
+      <div style="color:#64748B">✓ CoW branch isolated</div>
+      <div style="color:#64748B">✓ 50 slots pre-warmed</div>
+      <br>
+      <div style="color:#2563EB;font-weight:700">Fork ready in 8.3s ⚡</div>
+      <br>
+      <div class="comment"># Diff storage between blocks</div>
+      <div class="cmd">$ snapforge diff 44100000 44100500</div>
+    </div>
+  </div>
+</section>
+
+<section id="features">
+  <div class="section-inner">
+    <div class="section-label fade-in">Features</div>
+    <h2 class="section-title fade-in">Everything Your CI Pipeline Needs</h2>
+    <div class="features-grid">
+      <div class="feat-card fade-in">
+        <div class="feat-icon">⚡</div>
+        <h3>Sub-10s Fork Time</h3>
+        <p>Rust snapshot engine with Patricia-trie delta compression and LZ4 storage delivers deterministic forks in under 10 seconds on a standard 4-core CI runner.</p>
+      </div>
+      <div class="feat-card fade-in">
+        <div class="feat-icon">🌿</div>
+        <h3>Copy-on-Write Isolation</h3>
+        <p>16+ parallel CI jobs fork the same block simultaneously with full state isolation. Writes never leak between branches — zero RPC contention, zero state collisions.</p>
+      </div>
+      <div class="feat-card fade-in">
+        <div class="feat-icon">🔥</div>
+        <h3>PancakeSwap v3 Pre-Warming</h3>
+        <p>The 50 most-called mainnet contracts — including PancakeSwap v3 slot0, tickBitmap, and BEP-20 permit state — are pre-loaded before your first test line runs.</p>
+      </div>
+      <div class="feat-card fade-in">
+        <div class="feat-icon">🔧</div>
+        <h3>Foundry & Hardhat Plugins</h3>
+        <p>Drop-in replacements for <code>vm.createFork()</code> and <code>hardhat_reset</code>. Zero test-code changes required — just point to Snapforge and run.</p>
+      </div>
+      <div class="feat-card fade-in">
+        <div class="feat-icon">🔍</div>
+        <h3>Snapshot Diff CLI</h3>
+        <p>Human-readable storage change reports between any two block heights, scoped to named protocol contracts. Essential for post-upgrade audits and incident analysis.</p>
+      </div>
+      <div class="feat-card fade-in">
+        <div class="feat-icon">☁️</div>
+        <h3>GitHub Actions Integration</h3>
+        <p>One-line CI setup with <code>snapforge-action</code>: cache-aware snapshot fetching, automatic fork cleanup, and managed cloud state — no snapshot node to operate.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="how-it-works">
+  <div class="section-inner">
+    <div class="section-label fade-in">How It Works</div>
+    <h2 class="section-title fade-in">From Zero to Deterministic Fork in Four Steps</h2>
+    <div class="timeline">
+      <div class="tl-step fade-in">
+        <div class="tl-dot"><span class="tl-num">1</span></div>
+        <h3>Continuous State Sync</h3>
+        <p>Snapforge continuously exports BNB Chain state using <code>debug_storageRangeAt</code> RPC, compressing block-level deltas into a Patricia-trie format with LZ4 backing. Every recent block stays available without you running an archive node.</p>
+      </div>
+      <div class="tl-step fade-in">
+        <div class="tl-dot"><span class="tl-num">2</span></div>
+        <h3>CLI Fork Instantiation</h3>
+        <p>Run <code>snapforge fork --block latest</code>. The engine fetches the compressed snapshot, applies delta patches via revm's EVM execution backend, and materializes a fully deterministic fork in under 10 seconds — no RPC calls during test execution.</p>
+      </div>
+      <div class="tl-step fade-in">
+        <div class="tl-dot"><span class="tl-num">3</span></div>
+        <h3>CoW Branch Per Test Suite</h3>
+        <p>Each test suite receives its own copy-on-write branch from the base snapshot. Reads are shared; writes are isolated. 16 jobs fork simultaneously via the gRPC fork-state API without contention or state bleed between branches.</p>
+      </div>
+      <div class="tl-step fade-in">
+        <div class="tl-dot"><span class="tl-num">4</span></div>
+        <h3>Pre-Warmed Storage & Plugin Execution</h3>
+        <p>Before your test suite runs, Snapforge pre-loads the 50-slot registry — PancakeSwap v3 pool state, BEP-20 permit entries, and more. Your Foundry or Hardhat tests run through the native plugin with first-transaction latency under 200ms.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="metrics">
+  <div class="section-inner">
+    <div class="section-label fade-in">By the Numbers</div>
+    <h2 class="section-title fade-in">Performance That Changes How You Ship</h2>
+    <div class="metrics-grid">
+      <div class="metric-card fade-in">
+        <div class="metric-num">&lt;10s</div>
+        <div class="metric-label">Fork initialization time on a 4-core CI runner</div>
+      </div>
+      <div class="metric-card fade-in">
+        <div class="metric-num">16+</div>
+        <div class="metric-label">Concurrent isolated forks from a single base snapshot</div>
+      </div>
+      <div class="metric-card fade-in">
+        <div class="metric-num">&lt;200ms</div>
+        <div class="metric-label">First-transaction latency with pre-warmed slot registry</div>
+      </div>
+      <div class="metric-card fade-in">
+        <div class="metric-num">50</div>
+        <div class="metric-label">Mainnet contracts pre-warmed including PancakeSwap v3</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="tech">
+  <div class="section-inner">
+    <div class="section-label fade-in">Tech Stack</div>
+    <h2 class="section-title fade-in">Built on a Foundation That Scales</h2>
+    <p class="section-sub fade-in">Every layer of Snapforge is chosen for correctness and speed — from the Rust snapshot engine to the TypeScript Hardhat plugin.</p>
+    <div class="tech-pills fade-in">
+      <div class="tech-pill"><div class="tech-dot"></div>Rust (Core Engine)</div>
+      <div class="tech-pill"><div class="tech-dot"></div>revm (EVM Execution)</div>
+      <div class="tech-pill"><div class="tech-dot"></div>Patricia-Trie Delta Compression</div>
+      <div class="tech-pill"><div class="tech-dot"></div>LZ4 Storage Backing</div>
+      <div class="tech-pill"><div class="tech-dot"></div>Copy-on-Write State Branching</div>
+      <div class="tech-pill"><div class="tech-dot"></div>gRPC Fork-State API</div>
+      <div class="tech-pill"><div class="tech-dot"></div>BNB Chain debug_storageRangeAt</div>
+      <div class="tech-pill"><div class="tech-dot"></div>Foundry Plugin (Rust FFI)</div>
+      <div class="tech-pill"><div class="tech-dot"></div>Hardhat Plugin (TypeScript/Node.js)</div>
+      <div class="tech-pill"><div class="tech-dot"></div>GitHub Actions Integration</div>
+    </div>
+  </div>
+</section>
+
+<section id="roadmap">
+  <div class="section-inner">
+    <div class="section-label fade-in">Roadmap</div>
+    <h2 class="section-title fade-in">Shipping Fast, Shipping Right</h2>
+    <div class="roadmap-timeline">
+      <div class="rm-item fade-in">
+        <div class="rm-dot done">✓</div>
+        <div class="rm-badge done">Q1 2026 — Completed</div>
+        <h3>Core CLI & CoW Fork Engine</h3>
+        <p>Rust snapshot engine with sub-10s fork time, 16-concurrent CoW branch isolation, and public <code>snapforge fork --block latest</code> CLI via Cargo and Homebrew.</p>
+      </div>
+      <div class="rm-item fade-in">
+        <div class="rm-dot active">→</div>
+        <div class="rm-badge active">Q2 2026 — In Progress</div>
+        <h3>Foundry & Hardhat Plugins + Pre-Warming Registry</h3>
+        <p>Zero-migration Foundry plugin, TypeScript Hardhat plugin via npm, and the PancakeSwap v3 + BEP-20 slot pre-warming registry covering the 50 most-called mainnet contracts.</p>
+      </div>
+      <div class="rm-item fade-in">
+        <div class="rm-dot upcoming">◦</div>
+        <div class="rm-badge upcoming">Q3 2026 — Upcoming</div>
+        <h3>Snapshot Diffing CLI + Managed Cloud Service</h3>
+        <p>Human-readable <code>snapforge diff</code> reports, a managed cloud snapshot subscription eliminating self-hosted nodes, and <code>snapforge-action</code> for one-line GitHub Actions CI setup.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="cta">
+  <div class="section-inner">
+    <div class="section-label fade-in" style="color:rgba(255,255,255,.6)">Early Access</div>
+    <h2 class="fade-in">Stop Waiting on Forks. Start Shipping.</h2>
+    <p class="fade-in">Join the teams already running deterministic BNB Chain tests in CI. Get early access to the Foundry plugin, pre-warming registry, and managed snapshot service.</p>
+    <div class="cta-form fade-in">
+      <input type="email" placeholder="your@email.com">
+      <button type="button">Request Access</button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px">
+    <span class="footer-copy">© 2026 Snapforge. All rights reserved.</span>
+    <div class="footer-socials">
+      <a href="#" title="Twitter/X">&#10005;</a>
+      <a href="#" title="GitHub">&#9670;</a>
+      <a href="#" title="Discord">&#9670;</a>
+      <a href="#" title="Docs">&#9654;</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('visible'); } });
+}, {threshold: 0.12});
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
