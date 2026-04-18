@@ -1,0 +1,125 @@
+{
+  "_meta": {
+    "schema_version": "1.0",
+    "source": "startup_generator",
+    "generated_from": "output/projects/Snapforge/profile.json",
+    "notes": "Field names and values match Surge Discovery create form (Full Mode, 9 steps)"
+  },
+  "project_name": "Snapforge",
+  "tagline": "Deterministic BNB Smart Chain forks in under 10 seconds — test against real state, not mocks.",
+  "full_description": "Snapforge maintains a continuously-synced, compressed snapshot layer of BNB Chain mainnet state using a custom Patricia-trie delta-compression format backed by LZ4, allowing developers to clone a deterministic fork at any recent block via a single CLI command or GitHub Action. Forks are isolated per-test-suite using copy-on-write state branching, so 16 parallel CI jobs can fork the same block simultaneously without RPC contention or state collision. The engine natively pre-warms storage slots",
+  "category": "DevTools",
+  "stage": "MVP",
+  "logo": {
+    "local_path": "/Users/aliev_murat/Documents/Claude/Projects/SURGE/startup-generator/output/logos/Snapforge.svg",
+    "url": "",
+    "format": "svg",
+    "note": "Surge requires PNG or JPG. Convert SVG → PNG before upload."
+  },
+  "ai_tools": [
+    "Cursor",
+    "Claude Code",
+    "Cline"
+  ],
+  "tech_stack": {
+    "languages": [
+      "Rust (core snapshot engine)"
+    ],
+    "dev_tools": [
+      "revm (EVM execution backend)",
+      "Patricia-trie delta compression with LZ4 backing",
+      "BNB Chain debug_storageRangeAt RPC for state export",
+      "Copy-on-write in-memory state branching",
+      "gRPC fork-state API",
+      "Foundry plugin (Rust FFI)",
+      "Hardhat plugin (TypeScript/Node.js)",
+      "GitHub Actions native runner integration",
+      "BEP-20 EIP-2612 variant permit introspection",
+      "PancakeSwap v3 slot0 and tickBitmap pre-warming registry"
+    ]
+  },
+  "pitch_deck": {
+    "local_path": "/Users/aliev_murat/Documents/Claude/Projects/SURGE/startup-generator/output/decks/Snapforge_deck.pptx",
+    "url": "",
+    "format": "pptx",
+    "note": "Surge requires PDF. Convert PPTX → PDF before upload."
+  },
+  "whitepaper": {
+    "local_path": "",
+    "url": ""
+  },
+  "pitch_video": {
+    "url": "",
+    "source": "youtube",
+    "note": "Must be public/unlisted YouTube URL. Max 800 seconds."
+  },
+  "links": {
+    "website": "https://AllievMuro.github.io/snapforge",
+    "github": "https://github.com/AllievMuro/snapforge",
+    "telegram": "",
+    "x_twitter": ""
+  },
+  "team_description": "The team consists of systems engineers with backgrounds in Rust-based blockchain infrastructure and EVM tooling, with prior experience contributing to BSC node internals and Foundry plugin development. They have shipped production devtools used in CI pipelines at DeFi protocol teams and have deep familiarity with BSC's 3-second block cadence and its impact on fork stability.",
+  "team_members": [],
+  "roadmap": [
+    {
+      "quarter": "Q1 2026",
+      "status": "Completed",
+      "goal": "Ship a working CLI that forks BNB Chain mainnet state in under 10 seconds with CoW branch isolation",
+      "deliverables": [
+        "Rust snapshot engine with Patricia-trie delta compression and LZ4 storage, benchmarked at sub-10s fork time on a standard 4-core CI runner",
+        "Copy-on-write state branching supporting at least 16 concurrent isolated forks from the same base snapshot without RPC calls",
+        "Public CLI release of `snapforge fork --block latest` with documented install path via cargo and a Homebrew tap"
+      ]
+    },
+    {
+      "quarter": "Q2 2026",
+      "status": "In Progress",
+      "goal": "Release native Foundry and Hardhat plugins and the PancakeSwap v3 storage pre-warming registry",
+      "deliverables": [
+        "Foundry plugin replacing vm.createFork() with a Snapforge-backed equivalent, published to the Foundry registry with zero test-code-change migration path",
+        "Hardhat plugin replacing hardhat_reset via gRPC fork-state API, distributed as an npm package with TypeScript typings",
+        "PancakeSwap v3 and BEP-20 permit slot pre-warming registry covering the 50 most-called mainnet contracts, reducing first-transaction latency to under 200ms in benchmarks"
+      ]
+    },
+    {
+      "quarter": "Q3 2026",
+      "status": "Upcoming",
+      "goal": "Launch snapshot diffing tooling and a managed cloud snapshot service with GitHub Actions integration",
+      "deliverables": [
+        "snapforge diff <blockA> <blockB> CLI command producing human-readable storage change reports scoped to named protocol contracts, with JSON and terminal output modes",
+        "Managed snapshot subscription service hosting continuously-synced BNB Chain state, eliminating the need for teams to run their own snapshot node",
+        "Official GitHub Actions action (snapforge-action) enabling one-line CI setup with cache-aware snapshot fetching and automatic fork cleanup after job completion"
+      ]
+    }
+  ],
+  "revenue_sources": {
+    "stripe": null,
+    "paypal": null,
+    "shopify": null
+  },
+  "user_data": {
+    "google_analytics": null,
+    "mixpanel": null
+  },
+  "publish_readiness": {
+    "required": {
+      "logo": true,
+      "project_name": true,
+      "tagline": true,
+      "category": true,
+      "full_description": true,
+      "team": true,
+      "pitch_deck": true,
+      "pitch_video": false
+    },
+    "optional": {
+      "tech_stack": true,
+      "roadmap": true,
+      "socials": true,
+      "revenue_sources": false,
+      "user_data": false
+    },
+    "summary": "Required: 7/8, Optional: 3/5"
+  }
+}
